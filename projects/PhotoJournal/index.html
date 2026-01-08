@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>My Photo Journal</title>
+  <style>
+    body { font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif; margin: 0; background: linear-gradient(180deg, #0f0f0f, #1a1a1a); color: #eaeaea; }
+    header { background: radial-gradient(circle at top, #222, #0b0b0b); color: #fff; padding: 2.5rem 1rem 2rem; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.08); }
+    header h1 { margin: 0; font-size: 2rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
+    header p { margin-top: 0.5rem; font-size: 0.9rem; color: #ccc; }
+    main { max-width: 1000px; margin: 2rem auto; padding: 0 1rem; }
+    .upload-box { background: rgba(255,255,255,0.04); backdrop-filter: blur(6px); padding: 1.5rem; border-radius: 16px; margin-bottom: 2rem; box-shadow: 0 10px 30px rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.08); text-align: center; display: flex; flex-direction: column; gap: 0.75rem; }
+    .upload-hint { font-size: 0.8rem; opacity: 0.75; margin: 0; }
+    .button-group { display: flex; justify-content: center; flex-wrap: wrap; gap: 0.5rem; }
+    .file-btn, .delete-all-btn { appearance: none; color: #fff; border-radius: 999px; cursor: pointer; font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.5rem 1.25rem; border: 1px solid rgba(255,255,255,0.25); transition: transform 0.25s ease, background 0.25s ease; }
+    .file-btn { background: linear-gradient(135deg, #ffffff22, #ffffff08); }
+    .file-btn:hover { transform: scale(1.05); background: linear-gradient(135deg, #ffffff44, #ffffff11); }
+    .delete-all-btn { background: linear-gradient(135deg, #ff444422, #ff000011); border-color: rgba(255,0,0,0.25); }
+    .delete-all-btn:hover { transform: scale(1.05); background: linear-gradient(135deg, #ff4444aa, #ff000033); }
+    .upload-box.dragover { outline: 2px dashed rgba(255,255,255,0.4); background: rgba(255,255,255,0.06); }
+    .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; }
+    .photo-card { background: rgba(255,255,255,0.03); border-radius: 16px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.35); display: flex; flex-direction: column; transition: transform 0.3s ease, box-shadow 0.3s ease; border: 1px solid rgba(255,255,255,0.06); }
+    .photo-card:hover { transform: translateY(-4px); box-shadow: 0 20px 50px rgba(0,0,0,0.6); }
+    .photo-card img { width: 100%; height: 180px; object-fit: cover; transition: transform 0.3s ease; cursor: pointer; }
+    .photo-card:hover img { transform: scale(1.05); }
+    .photo-card .meta { padding: 0.5rem 0.75rem; display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: #bdbdbd; }
+    .photo-card button { background: rgba(255,255,255,0.08); color: #fff; border: 1px solid rgba(255,255,255,0.15); padding: 0.25rem 0.5rem; border-radius: 999px; cursor: pointer; font-size: 0.7rem; }
+    .photo-card button:hover { background: rgba(255,80,80,0.85); }
+    .lightbox { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, rgba(0,0,0,0.95), rgba(0,0,0,0.85)); display: none; justify-content: center; align-items: center; z-index: 1000; animation: fadeIn 0.3s ease; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .lightbox img { max-width: 95%; max-height: 95%; border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,0.8); }
+    .lightbox span { position: absolute; top: 15px; right: 25px; color: #fff; font-size: 2rem; cursor: pointer; }
+    footer { text-align: center; padding: 1.5rem 1rem; font-size: 0.75rem; color: #888; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 2rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>My Photo Journal</h1>
+    <p>A private place to store your photography</p>
+  </header>
+
+  <main>
+    <div class="upload-box" id="dropZone">
+      <strong>Add photos</strong>
+      <p class="upload-hint">Drag & drop images here or use the buttons below</p>
+      <div class="button-group">
+        <button class="file-btn" id="chooseBtn">Choose files</button>
+        <button class="delete-all-btn" id="deleteAllBtn">Delete All</button>
+      </div>
+      <input type="file" id="photoInput" accept="image/*" multiple hidden />
+    </div>
+
+    <section class="gallery" id="gallery"></section>
+  </main>
+
+  <div class="lightbox" id="lightbox">
+    <span id="closeLightbox">&times;</span>
+    <img id="lightboxImg" />
+  </div>
+
+  <footer>
+    Photos are stored locally in your browser (IndexedDB)
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/exif-js"></script>
+  <script>
+    const dbName = 'PhotoJournalDB';
+    const storeName = 'photos';
+    let db;
+
+    function openDatabase() {
+      const request = indexedDB.open(dbName, 1);
+      request.onupgradeneeded = e => {
+        db = e.target.result;
+        if (!db.objectStoreNames.contains(storeName)) db.createObjectStore(storeName, { keyPath: 'id', autoIncrement: true });
+      };
+      request.onsuccess = e => { db = e.target.result; loadPhotos(); };
+      request.onerror = () => alert('Failed to open database');
+    }
+
+    function savePhoto(dataUrl) {
+      const transaction = db.transaction([storeName], 'readwrite');
+      transaction.objectStore(storeName).add({ image: dataUrl, created: new Date() });
+    }
+
+    function addImagePreview(dataUrl) {
+      const gallery = document.getElementById('gallery');
+      const card = document.createElement('div');
+      card.className = 'photo-card';
+      const img = document.createElement('img');
+      img.src = dataUrl;
+      img.onclick = () => openLightbox(dataUrl);
+      const meta = document.createElement('div');
+      meta.className = 'meta';
+      const date = document.createElement('span');
+      date.textContent = new Date().toLocaleDateString();
+      const delBtn = document.createElement('button');
+      delBtn.textContent = 'Delete';
+      delBtn.onclick = () => { card.remove(); loadPhotos(); };
+      meta.appendChild(date);
+      meta.appendChild(delBtn);
+      const exifBox = document.createElement('div');
+      exifBox.style.fontSize = '0.75rem';
+      exifBox.style.padding = '0.5rem';
+      exifBox.style.borderTop = '1px solid #eee';
+      exifBox.textContent = 'Loading EXIF data...';
+      img.onload = function () {
+        EXIF.getData(img, function () {
+          const make = EXIF.getTag(this, 'Make');
+          const model = EXIF.getTag(this, 'Model');
+          const iso = EXIF.getTag(this, 'ISOSpeedRatings');
+          const aperture = EXIF.getTag(this, 'FNumber');
+          const shutterRaw = EXIF.getTag(this, 'ExposureTime');
+          const shutter = shutterRaw ? (shutterRaw.denominator ? `${shutterRaw.numerator}/${shutterRaw.denominator}s` : `${shutterRaw}s`) : null;
+          const focal = EXIF.getTag(this, 'FocalLength');
+          let exifText = '';
+          if (make || model) exifText += `${make || ''} ${model || ''}`.trim() + ' | ';
+          if (focal) exifText += `${focal}mm `;
+          if (aperture) exifText += `f/${aperture} `;
+          if (shutter) exifText += `${shutter} `;
+          if (iso) exifText += `ISO ${iso}`;
+          exifBox.textContent = exifText || 'No EXIF data available';
+        });
+      };
+      card.appendChild(img);
+      card.appendChild(meta);
+      card.appendChild(exifBox);
+      gallery.appendChild(card);
+    }
+
+    function loadPhotos() {
+      const gallery = document.getElementById('gallery');
+      gallery.innerHTML = '';
+      const transaction = db.transaction([storeName], 'readonly');
+      transaction.objectStore(storeName).openCursor().onsuccess = e => {
+        const cursor = e.target.result;
+        if (cursor) {
+          addImagePreview(cursor.value.image);
+          cursor.continue();
+        }
+      };
+    }
+
+    function deleteAllPhotos() {
+      if (confirm('Are you sure you want to delete ALL photos?')) {
+        const transaction = db.transaction([storeName], 'readwrite');
+        transaction.objectStore(storeName).clear();
+        transaction.oncomplete = loadPhotos;
+      }
+    }
+
+    const photoInput = document.getElementById('photoInput');
+    const dropZone = document.getElementById('dropZone');
+    document.getElementById('chooseBtn').onclick = () => photoInput.click();
+    document.getElementById('deleteAllBtn').onclick = deleteAllPhotos;
+
+    photoInput.addEventListener('change', e => {
+      [...e.target.files].forEach(file => {
+        if (!file.type.startsWith('image/')) return;
+        const reader = new FileReader();
+        reader.onload = (function(f){ return function(ev){ addImagePreview(ev.target.result); savePhoto(ev.target.result); }; })(file);
+        reader.readAsDataURL(file);
+      });
+      photoInput.value = '';
+    });
+
+    dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
+    dropZone.addEventListener('dragleave', () => { dropZone.classList.remove('dragover'); });
+    dropZone.addEventListener('drop', e => {
+      e.preventDefault();
+      dropZone.classList.remove('dragover');
+      [...e.dataTransfer.files].forEach(file => {
+        if (!file.type.startsWith('image/')) return;
+        const reader = new FileReader();
+        reader.onload = (function(f){ return function(ev){ addImagePreview(ev.target.result); savePhoto(ev.target.result); }; })(file);
+        reader.readAsDataURL(file);
+      });
+    });
+
+    function openLightbox(src) { document.getElementById('lightboxImg').src = src; document.getElementById('lightbox').style.display = 'flex'; }
+    document.getElementById('closeLightbox').onclick = () => { document.getElementById('lightbox').style.display = 'none'; };
+    document.getElementById('lightbox').onclick = e => { if (e.target.id === 'lightbox') e.target.style.display = 'none'; };
+
+    openDatabase();
+  </script>
+</body>
+</html>
