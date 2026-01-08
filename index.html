@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leonard Bruno | Full-Stack Developer & UX Designer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card: #1e293b;
+            --primary: #3b82f6;
+            --primary-dark: #2563eb;
+            --secondary: #8b5cf6;
+            --text: #f8fafc;
+            --text-muted: #cbd5e1;
+            --border: #334155;
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Fixed Profile Background */
+        .profile-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* Replace this with your local profile picture path */
+            background-image: url('DSC07236.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            z-index: -1;
+        }
+
+        .profile-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, 
+                rgba(15, 23, 42, 0.9) 0%, 
+                rgba(15, 23, 42, 0.7) 50%,
+                rgba(15, 23, 42, 0.9) 100%);
+            z-index: 1;
+        }
+
+        .bg-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 50%, rgba(56, 189, 248, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.1) 0%, transparent 50%);
+            z-index: 2;
+            mix-blend-mode: overlay;
+        }
+
+        /* Main Content */
+        .main-content {
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Typography */
+        h1, h2, h3, h4 {
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        h1 {
+            font-size: 4.5rem;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            letter-spacing: 1px;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            position: relative;
+            display: inline-block;
+            margin-bottom: 2.5rem;
+            color: var(--text);
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -10px;
+            width: 70px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+
+        p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+        }
+
+        /* Layout */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        section {
+            padding: 5rem 0;
+            position: relative;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(10px);
+            margin: 2rem 0;
+            border-radius: 0;
+        }
+
+        section:nth-child(even) {
+            background: rgba(30, 41, 59, 0.85);
+        }
+
+        /* Header & Navigation */
+        header {
+            padding: 8rem 0;
+            position: relative;
+            text-align: center;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+        }
+
+        .header-content {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 20;
+        }
+
+        .tagline {
+            font-size: 1.5rem;
+            margin-bottom: 3rem;
+            color: var(--text);
+            font-weight: 300;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 3rem;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.8rem 1.5rem;
+            border-radius: 30px;
+            transition: var(--transition);
+            position: relative;
+            background: rgba(30, 41, 59, 0.7);
+            border: 2px solid rgba(59, 130, 246, 0.3);
+            backdrop-filter: blur(5px);
+        }
+
+        nav a:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Hero Section */
+        .hero-content {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            margin-top: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 1rem 2.2rem;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: var(--transition);
+            border: 2px solid transparent;
+            font-size: 1.1rem;
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            box-shadow: none;
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 15px 30px rgba(59, 130, 246, 0.4);
+        }
+
+        /* About Section */
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin-top: 1.5rem;
+        }
+
+        .skill {
+            background: rgba(59, 130, 246, 0.2);
+            padding: 0.6rem 1.2rem;
+            border-radius: 30px;
+            font-size: 0.95rem;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: var(--primary);
+            font-weight: 600;
+            backdrop-filter: blur(5px);
+        }
+
+        /* Projects Section */
+        .projects {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        .project {
+            background: rgba(30, 41, 59, 0.7);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: var(--transition);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            backdrop-filter: blur(5px);
+        }
+
+        .project:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border-color: var(--primary);
+        }
+
+        .project-img {
+            height: 220px;
+            width: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .project-content {
+            padding: 1.8rem;
+        }
+
+        .project-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1.2rem 0;
+        }
+
+        .tech-tag {
+            background: rgba(59, 130, 246, 0.2);
+            color: var(--primary);
+            padding: 0.4rem 0.9rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .project-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        /* Contact Section */
+        .contact-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 1.8rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .contact-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(59, 130, 246, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--primary);
+            border: 2px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1.2rem;
+            margin-top: 2.5rem;
+        }
+
+        .social-links a {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            background: rgba(59, 130, 246, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text);
+            font-size: 1.4rem;
+            transition: var(--transition);
+            text-decoration: none;
+            border: 2px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .social-links a:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-5px) scale(1.1);
+            border-color: var(--primary);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 3rem 0;
+            border-top: 1px solid rgba(59, 130, 246, 0.2);
+            color: var(--text-muted);
+            margin-top: 2rem;
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(10px);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .about-content, .contact-content {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+            
+            h1 {
+                font-size: 3.5rem;
+            }
+            
+            h2 {
+                font-size: 2.2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            section {
+                padding: 4rem 0;
+            }
+            
+            h1 {
+                font-size: 2.8rem;
+            }
+            
+            h2 {
+                font-size: 2rem;
+            }
+            
+            nav {
+                gap: 1rem;
+            }
+            
+            .projects {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+            
+            header {
+                padding: 4rem 0;
+                min-height: 80vh;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .container {
+                padding: 0 1.5rem;
+            }
+            
+            .tagline {
+                font-size: 1.2rem;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        .delay-1 { animation-delay: 0.2s; }
+        .delay-2 { animation-delay: 0.4s; }
+        .delay-3 { animation-delay: 0.6s; }
+    </style>
+</head>
+<body>
+    <!-- Fixed Profile Background -->
+    <div class="profile-bg">
+        <div class="bg-overlay"></div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <header class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h1 class="fade-in">Leonard Bruno</h1>
+                    <p class="tagline fade-in delay-1">Website Developer & UX Designer</p>
+                    
+                    <nav class="fade-in delay-2">
+                        <a href="#about">About</a>
+                        <a href="#projects">Projects</a>
+                        <a href="#skills">Skills</a>
+                        <a href="#contact">Contact</a>
+                    </nav>
+                    
+                    <div class="hero-buttons fade-in delay-3">
+                        <a href="#projects" class="btn">
+                            <i class="fas fa-code"></i> View My Work
+                        </a>
+                        <a href="#contact" class="btn btn-outline">
+                            <i class="fas fa-paper-plane"></i> Get In Touch
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- About Section -->
+        <section id="about">
+            <div class="container">
+                <h2 class="fade-in">About Me</h2>
+                <div class="about-content">
+                    <div class="fade-in">
+                        <p>
+                            I am an IT student at Centro Escolar University with a strong focus on web design and web development. I specialize in creating responsive, user-centered digital experiences by combining technical development skills with thoughtful UI/UX design principles.
+                        </p>
+                        <br>
+                        <p>
+                            In addition to development, I am a photographer with a keen eye for visual composition, which allows me to bring a strong aesthetic sensibility to every project I work on. My work reflects a balance of functionality, usability, and visual clarity, with the goal of delivering engaging and effective digital solutions.
+                        </p>
+                        
+                        <div class="skills fade-in delay-1">
+                            <span class="skill">JavaScript</span>
+                            <span class="skill">React</span>
+                            <span class="skill">Node.js</span>
+                            <span class="skill">Python</span>
+                            <span class="skill">UI/UX Design</span>
+                            <span class="skill">Git</span>
+                            <span class="skill">Responsive Design</span>
+                        </div>
+                    </div>
+                    
+                    <div class="fade-in delay-2">
+                        <h3>Experience & Education</h3>
+                        <p><strong>Senior Developer</strong> at TechSolutions Inc. (2020-Present)</p>
+                        <p>Led a team of 5 developers to build enterprise web applications for Fortune 500 clients.</p>
+
+                        <p><strong>B.S. in Information Technology</strong> from Centro Escolar University (2022-2026)</p>
+                        <p>Graduated magna cum laude with a focus on Human-Computer Interaction.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects">
+            <div class="container">
+                <h2 class="fade-in">Featured Projects</h2>
+                <div class="projects">
+                    <!-- Project 2 -->
+                    <div class="project fade-in delay-1">
+                        <img src="https://images.squarespace-cdn.com/content/v1/64e81daf628fed5e7c669a44/0eb32c3e-6ab7-4f4d-897c-32e6afb00dec/SalaRestobarInteriorPhotoBeverly" alt="Shik's Restobar" class="project-img">
+                        <div class="project-content">
+                            <h3>Restobar</h3>
+                            <p>A comprehensive university management portal with course enrollment, grade tracking, faculty management, and student communication tools.</p>
+                            
+                            <div class="project-links">
+                                <a href="projects/restobar/index.html" target="_blank" class="btn">
+                                    <i class="fas fa-external-link-alt"></i> Live Demo
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Project 3 -->
+                    <div class="project fade-in delay-1">
+                        <img src="projects/university/img/school2.jpeg" alt="University Portal" class="project-img">
+                        <div class="project-content">
+                            <h3>University Portal</h3>
+                            <p>A comprehensive university management portal with course enrollment, grade tracking, faculty management, and student communication tools.</p>
+                            
+                            <div class="project-links">
+                                <a href="projects/university/index.html" target="_blank" class="btn">
+                                    <i class="fas fa-external-link-alt"></i> Live Demo
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Project 4 -->
+                    <div class="project fade-in delay-1">
+                        <img src="https://www.picmeta.com/wp-content/uploads/Featured-Image-PIE.png" alt="Photo Exif Generator" class="project-img">
+                        <div class="project-content">
+                            <h3>Photography EXIF Generator</h3>
+                            <p>A comprehensive university management portal with course enrollment, grade tracking, faculty management, and student communication tools.</p>
+                            
+                            <div class="project-links">
+                                <a href="projects/exif-gen-app/index.html" target="_blank" class="btn">
+                                    <i class="fas fa-external-link-alt"></i> Live Demo
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Project 5 -->
+                    <div class="project fade-in delay-2">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRgiS0XFf_0MVM9-EXXan0nNqCpLTAiS5Dzw&s" alt="Zaragosa ID Generator" class="project-img">
+                        <div class="project-content">
+                            <h3>Villa Zaragosa ID Generator</h3>
+                            <p>A desktop application for photographers to manage, edit, and batch process image metadata with support for custom templates and presets.</p>
+                            
+                            <div class="project-links">
+                                <a href="projects/ZARGOSA/index.html" target="_blank" class="btn">
+                                    <i class="fas fa-external-link-alt"></i> Live Demo
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact">
+            <div class="container">
+                <h2 class="fade-in">Get In Touch</h2>
+                <div class="contact-content">
+                    <div class="fade-in">
+                        <p>I'm currently open to new opportunities and interesting projects. Whether you have a question, want to collaborate, or just want to say hello, feel free to reach out!</p>
+                        
+                        <div class="contact-info">
+                            <div class="contact-item">
+                                <div class="contact-icon">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <div>
+                                    <h4>Email</h4>
+                                    <p>leonardbruno1209@gmail.com</p>
+                                </div>
+                            </div>
+                            
+                            <div class="contact-item">
+                                <div class="contact-icon">
+                                    <i class="fas fa-phone"></i>
+                                </div>
+                                <div>
+                                    <h4>Phone</h4>
+                                    <p>+63 926 431 4983</p>
+                                </div>
+                            </div>
+                            
+                            <div class="contact-item">
+                                <div class="contact-icon">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </div>
+                                <div>
+                                    <h4>Location</h4>
+                                    <p>Bulacan</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="social-links">
+                            <a href="https://github.com/LeoZX12" target="_blank">
+                                <i class="fab fa-github"></i>
+                            </a>
+                            <a href="https://www.linkedin.com/in/leonard-bruno-1b9925269/" target="_blank">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="fade-in delay-1">
+                        <h3>Let's Work Together</h3>
+                        <p>I'm particularly interested in:</p>
+                        <ul style="color: var(--text-muted); margin-left: 1.5rem; margin-top: 1rem;">
+                            <li style="margin-bottom: 0.5rem;">Full-stack development projects</li>
+                            <li style="margin-bottom: 0.5rem;">UI/UX design collaborations</li>
+                            <li style="margin-bottom: 0.5rem;">Open source contributions</li>
+                            <li style="margin-bottom: 0.5rem;">Technical consulting</li>
+                        </ul>
+                        
+                        <a href="mailto:leonardbruno1209@gmail.com" class="btn" style="margin-top: 2rem;">
+                            <i class="fas fa-paper-plane"></i> Send Message
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <div class="container">
+                <p>© 2026 Leonard Bruno. All rights reserved.</p>
+                <p style="margin-top: 0.5rem; font-size: 0.9rem;">Designed and built with ❤️ by Leonard Bruno</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Simple script for smooth scrolling and animations
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            
+            // Animation on scroll
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('fade-in');
+                    }
+                });
+            }, observerOptions);
+            
+            // Observe elements for animation
+            document.querySelectorAll('section h2, .about-content > div, .project, .contact-content > div').forEach(el => {
+                observer.observe(el);
+            });
+        });
+    </script>
+</body>
+</html>
