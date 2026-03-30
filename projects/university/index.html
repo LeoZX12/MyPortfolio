@@ -1,231 +1,466 @@
-<!doctype html>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-  <head>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ratvų University</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"/>
+  <style>
+    /* ==========================================
+       RATVŲ UNIVERSITY — Professional Redesign
+       ========================================== */
 
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ratvu.com</title>
-    <link rel="stylesheet" type="text/css" href="css/styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Fjalla+One&family=Libre+Baskerville&family=Playfair+Display&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"/>
+    :root {
+      --crimson: #7a1c1c;
+      --crimson-dark: #4e1010;
+      --crimson-light: #a63030;
+      --gold: #c4993a;
+      --gold-light: #e8c06e;
+      --cream: #faf7f2;
+      --off-white: #f1ede5;
+      --text-dark: #1a1210;
+      --text-mid: #4a3f3a;
+      --text-light: #7a6e68;
+      --white: #ffffff;
+      --shadow-sm: 0 2px 12px rgba(0,0,0,0.08);
+      --shadow-md: 0 8px 30px rgba(0,0,0,0.14);
+      --shadow-lg: 0 20px 60px rgba(0,0,0,0.2);
+      --radius: 4px;
+      --radius-lg: 12px;
+      --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
 
-  </head>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body { font-family: 'Outfit', sans-serif; color: var(--text-dark); background-color: var(--cream); overflow-x: hidden; }
+    img { display: block; width: 100%; height: 100%; object-fit: cover; }
+    a { text-decoration: none; }
+    ul { list-style: none; }
 
+    /* BUTTONS */
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--crimson); color: var(--white);
+      padding: 14px 30px; border: 2px solid var(--crimson);
+      border-radius: var(--radius); font-family: 'Outfit', sans-serif;
+      font-size: 0.85rem; font-weight: 600; letter-spacing: 0.08em;
+      text-transform: uppercase; cursor: pointer; transition: var(--transition);
+    }
+    .btn-primary:hover { background: var(--crimson-dark); border-color: var(--crimson-dark); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(122,28,28,0.35); }
 
-  <body>
-    <header class="header" id="home">
-      <div class="headerbox">
-        <div class="row">
-          <img src="img/logo1.png" class="logo"/>
-           <h1 class="title">ŔATVŲ UNIVERSITY</h1>
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: transparent; color: var(--white);
+      padding: 14px 30px; border: 2px solid rgba(255,255,255,0.6);
+      border-radius: var(--radius); font-family: 'Outfit', sans-serif;
+      font-size: 0.85rem; font-weight: 600; letter-spacing: 0.08em;
+      text-transform: uppercase; cursor: pointer; transition: var(--transition);
+    }
+    .btn-ghost:hover { background: rgba(255,255,255,0.15); border-color: var(--white); }
 
-                <nav>
-                  <ul class="nav">
-                    <b>
-                      <li><a href="#home">Home</a></li>
-                      <li><a href="#gallery">Gallery</a></li>
-                      <li><a href="#admission">Admission</a></li>
-                      <li><a href="#aboutus">About us</a></li>
-                    </b>
-                  </ul>
-                </nav>
+    /* SECTION LABELS */
+    .section-label { display: inline-block; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; }
+    .section-label--light { color: var(--gold-light); }
+    .section-heading { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.2rem, 4vw, 3.2rem); font-weight: 600; color: var(--crimson-dark); line-height: 1.1; margin-bottom: 32px; }
+    .section-heading em { font-style: italic; color: var(--crimson-light); }
+    .section-heading--light { color: var(--white); }
+    .section-heading--light em { color: var(--gold-light); }
 
+    /* NAVBAR */
+    .navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(30,8,8,0.96); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(196,153,58,0.25); }
+    .nav-inner { max-width: 1280px; margin: 0 auto; padding: 0 40px; height: 72px; display: flex; align-items: center; justify-content: space-between; }
+    .nav-brand { display: flex; align-items: center; gap: 14px; }
+    .nav-crest { width: 42px; height: 42px; background: var(--gold); color: var(--crimson-dark); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Cormorant Garamond', serif; font-size: 0.95rem; font-weight: 700; letter-spacing: 0.05em; flex-shrink: 0; }
+    .nav-title-block { display: flex; flex-direction: column; }
+    .nav-name { font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 600; color: var(--white); letter-spacing: 0.08em; line-height: 1.2; }
+    .nav-tagline { font-size: 0.62rem; color: var(--gold); letter-spacing: 0.12em; text-transform: uppercase; }
+    .nav-links { display: flex; align-items: center; gap: 6px; }
+    .nav-links li a { color: rgba(255,255,255,0.8); font-size: 0.8rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; padding: 8px 14px; border-radius: var(--radius); transition: var(--transition); }
+    .nav-links li a:hover { color: var(--white); background: rgba(255,255,255,0.08); }
+    .nav-cta { background: var(--gold) !important; color: var(--crimson-dark) !important; font-weight: 700 !important; margin-left: 8px; }
+    .nav-cta:hover { background: var(--gold-light) !important; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(196,153,58,0.4) !important; }
+
+    /* HERO */
+    .hero { position: relative; min-height: 100vh; display: flex; align-items: center; overflow: hidden; }
+    .hero-bg { position: absolute; inset: 0; background: url('img/school2.jpeg') center/cover no-repeat; transform: scale(1.05); animation: heroZoom 20s ease-in-out infinite alternate; }
+    @keyframes heroZoom { from { transform: scale(1.05); } to { transform: scale(1.12); } }
+    .hero-overlay { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(30,8,8,0.88) 0%, rgba(60,16,16,0.75) 50%, rgba(15,4,4,0.65) 100%); }
+    .hero-content { position: relative; z-index: 2; max-width: 1280px; margin: 0 auto; padding: 80px 40px 0; animation: fadeUp 1s ease 0.2s both; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    .hero-eyebrow { font-size: 0.8rem; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; }
+    .hero-heading { font-family: 'Cormorant Garamond', serif; font-size: clamp(3.5rem, 8vw, 7rem); font-weight: 300; color: var(--white); line-height: 1.0; margin-bottom: 28px; }
+    .hero-heading em { font-style: italic; color: var(--gold-light); font-weight: 400; }
+    .hero-sub { max-width: 520px; font-size: 1.05rem; color: rgba(255,255,255,0.75); line-height: 1.7; margin-bottom: 44px; font-weight: 300; }
+    .hero-ctas { display: flex; gap: 16px; flex-wrap: wrap; }
+    .hero-scroll-hint { position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 10px; z-index: 2; animation: fadeUp 1s ease 1s both; }
+    .hero-scroll-hint span { font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.5); }
+    .scroll-line { width: 1px; height: 50px; background: linear-gradient(to bottom, rgba(255,255,255,0.5), transparent); animation: scrollPulse 2s ease-in-out infinite; }
+    @keyframes scrollPulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
+
+    /* ENROLL */
+    .enroll-section { background: var(--cream); padding: 100px 40px; }
+    .enroll-inner { max-width: 1000px; margin: 0 auto; text-align: center; }
+    .enroll-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-top: 20px; }
+    .enroll-card { position: relative; background: var(--white); border: 1px solid #e8e0d6; border-radius: var(--radius-lg); padding: 44px 36px; text-align: left; transition: var(--transition); box-shadow: var(--shadow-sm); }
+    .enroll-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
+    .enroll-card--featured { border-color: var(--crimson); background: linear-gradient(160deg, #fdf8f8, var(--white)); }
+    .enroll-card-badge { position: absolute; top: -12px; right: 24px; background: var(--gold); color: var(--crimson-dark); font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 4px 14px; border-radius: 20px; }
+    .enroll-card-icon { width: 52px; height: 52px; background: linear-gradient(135deg, var(--crimson), var(--crimson-light)); border-radius: 14px; display: flex; align-items: center; justify-content: center; color: var(--white); font-size: 1.3rem; margin-bottom: 20px; }
+    .enroll-card h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.7rem; font-weight: 600; color: var(--crimson-dark); margin-bottom: 12px; }
+    .enroll-card p { font-size: 0.9rem; color: var(--text-mid); line-height: 1.7; margin-bottom: 24px; }
+    .enroll-features { margin-bottom: 32px; }
+    .enroll-features li { display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: var(--text-mid); padding: 6px 0; border-bottom: 1px solid var(--off-white); }
+    .enroll-features li i { color: var(--gold); font-size: 0.7rem; }
+
+    /* GALLERY */
+    .gallery-section { background: linear-gradient(160deg, var(--crimson-dark) 0%, #2e0e0e 100%); padding: 100px 40px; }
+    .gallery-inner { max-width: 1280px; margin: 0 auto; }
+    .gallery-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr; grid-template-rows: 360px; gap: 16px; margin-top: 20px; }
+    .gallery-item { position: relative; border-radius: var(--radius-lg); overflow: hidden; cursor: pointer; }
+    .gallery-item.img-placeholder { background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02)); border: 1px solid rgba(255,255,255,0.1); }
+    .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
+    .gallery-item:hover img { transform: scale(1.06); }
+    .gallery-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(30,8,8,0.9) 0%, transparent 60%); display: flex; flex-direction: column; justify-content: flex-end; padding: 28px; opacity: 0; transition: var(--transition); }
+    .gallery-item:hover .gallery-overlay { opacity: 1; }
+    .gallery-overlay h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; color: var(--white); margin-bottom: 6px; }
+    .gallery-overlay p { font-size: 0.82rem; color: rgba(255,255,255,0.75); line-height: 1.5; }
+
+    /* ADMISSION */
+    .admission-section { background: var(--off-white); padding: 100px 40px; }
+    .admission-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1.5fr; gap: 80px; align-items: start; }
+    .admission-desc { font-size: 0.95rem; color: var(--text-mid); line-height: 1.75; margin-bottom: 44px; }
+    .admission-steps { display: flex; flex-direction: column; gap: 20px; }
+    .step { display: flex; align-items: center; gap: 18px; }
+    .step-num { font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; font-weight: 700; color: var(--gold); line-height: 1; min-width: 48px; }
+    .step-text { font-size: 0.9rem; font-weight: 500; color: var(--text-mid); border-bottom: 1px solid #ddd6cc; padding-bottom: 20px; width: 100%; }
+
+    /* FORM CARD */
+    .form-card { background: var(--white); border-radius: var(--radius-lg); padding: 44px; box-shadow: var(--shadow-md); border: 1px solid #e8e0d6; }
+    .form-title { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 600; color: var(--crimson-dark); margin-bottom: 28px; }
+    .form-row { display: flex; gap: 20px; }
+    .form-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; flex: 1; }
+    .form-group--full { flex: 1 1 100%; }
+    .form-group label { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-mid); }
+    .form-group input, .form-group select, .form-group textarea { font-family: 'Outfit', sans-serif; font-size: 0.9rem; color: var(--text-dark); background: var(--cream); border: 1.5px solid #ddd6cc; border-radius: var(--radius); padding: 12px 16px; transition: var(--transition); outline: none; width: 100%; }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--crimson); background: var(--white); box-shadow: 0 0 0 3px rgba(122,28,28,0.1); }
+    .form-group textarea { resize: vertical; min-height: 130px; }
+    .btn-submit { width: 100%; justify-content: center; margin-top: 8px; font-size: 0.85rem; }
+
+    /* ABOUT */
+    .about-section { background: linear-gradient(160deg, #1e0808 0%, #2e1010 100%); padding: 100px 40px; }
+    .about-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1.4fr; gap: 80px; align-items: start; }
+    .about-desc { font-size: 0.95rem; color: rgba(255,255,255,0.65); line-height: 1.75; margin-bottom: 36px; }
+    .contact-details { display: flex; flex-direction: column; gap: 16px; margin-bottom: 36px; }
+    .contact-item { display: flex; align-items: center; gap: 14px; font-size: 0.88rem; color: rgba(255,255,255,0.75); }
+    .contact-item i { width: 36px; height: 36px; background: rgba(196,153,58,0.15); border: 1px solid rgba(196,153,58,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--gold); flex-shrink: 0; }
+    .map-box { border-radius: var(--radius-lg); overflow: hidden; height: 200px; border: 1px solid rgba(255,255,255,0.1); }
+    .map-box img { width: 100%; height: 100%; object-fit: cover; }
+
+    /* FOOTER */
+    .footer { background: #0f0404; border-top: 1px solid rgba(196,153,58,0.2); padding: 28px 40px; position: relative; }
+    .footer-inner { max-width: 1280px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+    .footer-brand { display: flex; align-items: center; gap: 10px; color: rgba(255,255,255,0.7); font-size: 0.82rem; font-weight: 500; letter-spacing: 0.05em; }
+    .nav-crest--sm { width: 30px; height: 30px; font-size: 0.7rem; }
+    .footer-copy { font-size: 0.75rem; color: rgba(255,255,255,0.4); text-align: center; }
+    .footer-socials { display: flex; gap: 10px; }
+    .footer-socials a { width: 34px; height: 34px; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.6); font-size: 0.82rem; transition: var(--transition); }
+    .footer-socials a:hover { background: var(--gold); border-color: var(--gold); color: var(--crimson-dark); }
+    .back-to-top { position: absolute; right: 40px; bottom: 28px; width: 40px; height: 40px; background: var(--crimson); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--white); font-size: 0.8rem; transition: var(--transition); box-shadow: 0 4px 16px rgba(122,28,28,0.4); }
+    .back-to-top:hover { background: var(--crimson-light); transform: translateY(-3px); }
+
+    /* RESPONSIVE */
+    @media (max-width: 1024px) {
+      .enroll-cards { grid-template-columns: 1fr; max-width: 500px; margin-inline: auto; }
+      .gallery-grid { grid-template-columns: 1fr 1fr; grid-template-rows: 260px 260px; }
+      .gallery-item--large { grid-column: 1 / -1; }
+      .admission-inner, .about-inner { grid-template-columns: 1fr; gap: 48px; }
+    }
+    @media (max-width: 768px) {
+      .nav-inner { padding: 0 20px; }
+      .nav-links { display: none; }
+      .hero-content { padding: 80px 20px 0; }
+      .enroll-section, .gallery-section, .admission-section, .about-section { padding: 72px 20px; }
+      .gallery-grid { grid-template-columns: 1fr; grid-template-rows: repeat(3, 240px); }
+      .form-row { flex-direction: column; }
+      .form-card { padding: 28px; }
+      .footer-inner { flex-direction: column; text-align: center; }
+      .back-to-top { position: static; margin: 0 auto; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar" id="home">
+    <div class="nav-inner">
+      <div class="nav-brand">
+        <div class="nav-crest">RU</div>
+        <div class="nav-title-block">
+          <span class="nav-name">RATVŲ UNIVERSITY</span>
+          <span class="nav-tagline">Est. Excellence · Forging Futures</span>
+        </div>
+      </div>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="#home">Home</a></li>
+          <li><a href="#gallery">Gallery</a></li>
+          <li><a href="#admission">Admission</a></li>
+          <li><a href="#aboutus">About Us</a></li>
+          <li><a href="#admission" class="nav-cta">Apply Now</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero" id="top">
+    <div class="hero-bg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">Welcome to</p>
+      <h1 class="hero-heading">Ratvų<br><em>University</em></h1>
+      <p class="hero-sub">Where tradition meets innovation — shaping tomorrow's leaders through academic excellence and a commitment to lifelong learning.</p>
+      <div class="hero-ctas">
+        <a href="#admission" class="btn-primary">Begin Your Journey</a>
+        <a href="#gallery" class="btn-ghost">Explore Campus</a>
+      </div>
+    </div>
+    <div class="hero-scroll-hint">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ENROLLMENT CARDS -->
+  <section class="enroll-section">
+    <div class="enroll-inner">
+      <p class="section-label">Admissions Open</p>
+      <h2 class="section-heading">Choose Your Path</h2>
+      <div class="enroll-cards">
+        <div class="enroll-card">
+          <div class="enroll-card-icon"><i class="fa-solid fa-school"></i></div>
+          <h3>Senior High School</h3>
+          <p>Build a strong academic foundation with our diverse SHS strands — ABM, STEM, HUMSS, and GAS. Guided by dedicated faculty.</p>
+          <ul class="enroll-features">
+            <li><i class="fa-solid fa-check"></i> Multiple Strands Available</li>
+            <li><i class="fa-solid fa-check"></i> Scholarship Opportunities</li>
+            <li><i class="fa-solid fa-check"></i> State-of-the-art Facilities</li>
+          </ul>
+          <a href="#admission" class="btn-primary">Enroll Now</a>
+        </div>
+        <div class="enroll-card enroll-card--featured">
+          <div class="enroll-card-badge">Most Popular</div>
+          <div class="enroll-card-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+          <h3>College</h3>
+          <p>Pursue your passion with over 25 degree programs across technology, health sciences, business, arts, and humanities.</p>
+          <ul class="enroll-features">
+            <li><i class="fa-solid fa-check"></i> 25+ Degree Programs</li>
+            <li><i class="fa-solid fa-check"></i> Industry Partnerships</li>
+            <li><i class="fa-solid fa-check"></i> Research & Innovation Hubs</li>
+          </ul>
+          <a href="#admission" class="btn-primary">Enroll Now</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section class="gallery-section" id="gallery">
+    <div class="gallery-inner">
+      <p class="section-label section-label--light">Our Campus</p>
+      <h2 class="section-heading section-heading--light">Life at Ratvų</h2>
+      <div class="gallery-grid">
+        <div class="gallery-item gallery-item--large">
+          <img src="img/campus.jpg" alt="Campus" onerror="this.parentElement.classList.add('img-placeholder')"/>
+          <div class="gallery-overlay">
+            <h3>The Campus</h3>
+            <p>A vibrant, green campus designed for learning, collaboration, and student life at its fullest.</p>
           </div>
-      </div>
-
-
-    </header>
-
-
-
-    <section class="section1">
-
-      <div class="row">
-        <div class="card">
-          <h1>SENIOR HIGHSCHOOL</h1>
-
-          <h2>ADMISSION</h2>
-          <a href="#" class="btncard">ENROLL NOW!</a>
         </div>
-
-
-
-
-        <div class="card">
-          <h1>COLLEGE</h1>
-
-          <h2>ADMISSION</h2>
-          <a href="#" class="btncard">ENROLL NOW!</a>
+        <div class="gallery-item">
+          <img src="img/classrooms.jpg" alt="Classrooms" onerror="this.parentElement.classList.add('img-placeholder')"/>
+          <div class="gallery-overlay">
+            <h3>Classrooms</h3>
+            <p>Modern, tech-equipped rooms built to inspire curiosity and deep academic engagement.</p>
+          </div>
+        </div>
+        <div class="gallery-item">
+          <img src="img/Library.jpg" alt="Library" onerror="this.parentElement.classList.add('img-placeholder')"/>
+          <div class="gallery-overlay">
+            <h3>Library</h3>
+            <p>A vast repository of knowledge — thousands of volumes, digital resources, and quiet study spaces.</p>
+          </div>
         </div>
       </div>
+    </div>
+  </section>
 
-
-    </section>
-
-    <section class="section2" id="gallery">
-      <div class="row">
-
-        <h1>GALLERY</h1>
-
-        <div class="gallery">
-          <h2>CAMPUS</h2>
-          <img src="img/campus.jpg" class"campus"/>
-          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+  <!-- ADMISSION -->
+  <section class="admission-section" id="admission">
+    <div class="admission-inner">
+      <div class="admission-info">
+        <p class="section-label">Join Us</p>
+        <h2 class="section-heading">Admission<br><em>Application</em></h2>
+        <p class="admission-desc">Taking the first step toward your future is simple. Fill out the form and our admissions team will reach out within 2–3 business days.</p>
+        <div class="admission-steps">
+          <div class="step"><span class="step-num">01</span><span class="step-text">Submit Application</span></div>
+          <div class="step"><span class="step-num">02</span><span class="step-text">Review & Interview</span></div>
+          <div class="step"><span class="step-num">03</span><span class="step-text">Receive Acceptance</span></div>
         </div>
-
-        <div class="gallery2">
-          <h2>CLASSROOMS</h2>
-          <img src="img/classrooms.jpg" class"classrooms"/>
-          <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-        </div>
-
-        <div class="gallery2">
-          <h2>LIBRARY</h2>
-          <img src="img/Library.jpg" class"library"/>
-          <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. .</p>
-        </div>
-
       </div>
-    </section>
-
-    <section class="section3" id="admission">
-      <div class="row">
-
-        <h1>ADMISSION</h1>
-
-        <div class="inputs">
-          <form class="inputtxts">
-
-            <div class="fname">
-              <label>Full Name:</label>
-              <input type="fullname" placeholder="Enter Full Name" class="full"/>
+      <div class="form-card">
+        <form onsubmit="return false;">
+          <div class="form-row">
+            <div class="form-group form-group--full">
+              <label>Full Name</label>
+              <input type="text" placeholder="e.g. Maria Santos"/>
             </div>
-
-            <div class="strand">
-              <label>Course/Strand:</label>
-              <select name="strand" class="crse">
-                <option>Accountancy, Business, and Management (ABM)</option>
-                <option>General Academic Strand (GAS)</option>
-                <option>Humanities and Social Sciences (HUMMS)</option>
-                <option>Science, Technology, Engineering, and Mathematics (STEM)</option>
-                <option>Bachelor of Science in Information Technology (BSIT)</option>
-                <option>Bachelor of Science in Accountancy (BSA)</option>
-                <option>Bachelor of Science in Business Administration (BSBA)</option>
-                <option>Bachelor of Science in Computer Science (BSCS)</option>
-                <option>Bachelor of Science in Computer Engineering (BSCE)</option>
-                <option>Bachelor of Science in Hospitality Management (BSHM)</option>
-                <option>Bachelor of Science in Pharmacy (BSPharm)</option>
-                <option>Bachelor of Science in Nursing (BSN)</option>
-                <option>Bachelor of Science in Medical Techcnology (BSMT)</option>
-                <option>Bachelor of Science in Chemical Engineering (BSCE)</option>
-                <option>Bachelor of Science in Radiologic Technology (BSRT)</option>
-                <option>Bachelor of Science in Medicine (BSMed)</option>
-                <option>Bachelor of Science in Psychology (BSPsych)</option>
-                <option>Bachelor of Science in Dentistry (BSD)</option>
-                <option>Bachelor of Science in Optometry (BSOpto)</option>
-                <option>Bachelor of Science in Chemistry (BSChem)</option>
-                <option>Bachelor of Science in Biology (BSBio)</option>
-                <option>Bachelor of Arts in Journalism (BAJ)</option>
-                <option>Bachelor of Arts in Political Science (BAPS)</option>
-                <option>Bachelor of Arts in Communication Arts (BACA)</option>
-                <option>Bachelor of Arts in Linguistics (BAL)</option>
-                <option>Bachelor of Arts in Philosophy (BAPhilo)</option>
-                <option>Bachelor of Arts in Sociology (BAS)</option>
-                <option>Bachelor of Arts in Literature (BALit)</option>
+          </div>
+          <div class="form-row">
+            <div class="form-group form-group--full">
+              <label>Course / Strand</label>
+              <select>
+                <option value="" disabled selected>Select a program...</option>
+                <optgroup label="Senior High School">
+                  <option>Accountancy, Business & Management (ABM)</option>
+                  <option>General Academic Strand (GAS)</option>
+                  <option>Humanities & Social Sciences (HUMSS)</option>
+                  <option>Science, Technology, Engineering & Mathematics (STEM)</option>
+                </optgroup>
+                <optgroup label="Technology">
+                  <option>BS Information Technology (BSIT)</option>
+                  <option>BS Computer Science (BSCS)</option>
+                  <option>BS Computer Engineering (BSCpE)</option>
+                </optgroup>
+                <optgroup label="Business">
+                  <option>BS Accountancy (BSA)</option>
+                  <option>BS Business Administration (BSBA)</option>
+                  <option>BS Hospitality Management (BSHM)</option>
+                </optgroup>
+                <optgroup label="Health Sciences">
+                  <option>BS Nursing (BSN)</option>
+                  <option>BS Pharmacy (BSPharm)</option>
+                  <option>BS Medical Technology (BSMT)</option>
+                  <option>BS Radiologic Technology (BSRT)</option>
+                  <option>BS Medicine (BSMed)</option>
+                  <option>BS Dentistry (BSD)</option>
+                  <option>BS Optometry (BSOpto)</option>
+                  <option>BS Psychology (BSPsych)</option>
+                </optgroup>
+                <optgroup label="Sciences">
+                  <option>BS Chemical Engineering (BSChE)</option>
+                  <option>BS Chemistry (BSChem)</option>
+                  <option>BS Biology (BSBio)</option>
+                </optgroup>
+                <optgroup label="Arts & Humanities">
+                  <option>BA Journalism (BAJ)</option>
+                  <option>BA Political Science (BAPS)</option>
+                  <option>BA Communication Arts (BACA)</option>
+                  <option>BA Linguistics (BAL)</option>
+                  <option>BA Philosophy (BAPhilo)</option>
+                  <option>BA Sociology (BAS)</option>
+                  <option>BA Literature (BALit)</option>
+                </optgroup>
               </select>
             </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Birthday</label>
+              <input type="date"/>
+            </div>
+            <div class="form-group">
+              <label>Contact Number</label>
+              <input type="tel" placeholder="09XX XXX XXXX"/>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group form-group--full">
+              <label>E-Mail Address</label>
+              <input type="email" placeholder="you@email.com"/>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Guardian's Name</label>
+              <input type="text" placeholder="Full name"/>
+            </div>
+            <div class="form-group">
+              <label>Guardian's Occupation</label>
+              <input type="text" placeholder="Occupation"/>
+            </div>
+          </div>
+          <button type="submit" class="btn-primary btn-submit">Submit Application <i class="fa-solid fa-arrow-right"></i></button>
+        </form>
+      </div>
+    </div>
+  </section>
 
-            <div class="bday">
-              <label>Birthday:</label>
-              <input type="date" class="dte"/>
+  <!-- ABOUT US -->
+  <section class="about-section" id="aboutus">
+    <div class="about-inner">
+      <div class="about-contact">
+        <p class="section-label section-label--light">Get In Touch</p>
+        <h2 class="section-heading section-heading--light">About &<br><em>Inquiries</em></h2>
+        <p class="about-desc">Have questions? We're here to help. Reach out to our team and we'll respond promptly.</p>
+        <div class="contact-details">
+          <div class="contact-item">
+            <i class="fa-solid fa-envelope"></i>
+            <span>halimawsabanga@gmail.com</span>
+          </div>
+          <div class="contact-item">
+            <i class="fa-solid fa-phone"></i>
+            <span>0969 696 9696</span>
+          </div>
+          <div class="contact-item">
+            <i class="fa-solid fa-location-dot"></i>
+            <span>Dito Dito Lang, Philippines</span>
+          </div>
+        </div>
+        <div class="map-box">
+          <img src="img/map.png" alt="Campus Map" onerror="this.style.display='none'"/>
+        </div>
+      </div>
+      <div>
+        <div class="form-card">
+          <h3 class="form-title">Send Us a Message</h3>
+          <form onsubmit="return false;">
+            <div class="form-group form-group--full">
+              <label>Your Name</label>
+              <input type="text" placeholder="Full Name"/>
             </div>
-
-            <div class="contact">
-              <label>Contact Number:</label>
-              <input type="number" placeholder="Enter Contact No."class="num"/>
+            <div class="form-group form-group--full">
+              <label>Question / Inquiry</label>
+              <textarea rows="5" placeholder="Write your message here..."></textarea>
             </div>
-
-            <div class="e-mail">
-              <label>E-Mail:</label>
-              <input type="text" placeholder="Enter E-Mail."class="email"/>
-            </div>
-
-            <div class="gname">
-              <label>Name of Guardian:</label>
-              <input type="guardian" placeholder="Enter Name"class="gdname"/>
-            </div>
-
-            <div class="occupation">
-              <label>Occupation of Guardian:</label>
-              <input type="occupation" placeholder="Enter Occupation"class="occup"/>
-            </div>
-            <br />
-            <div class="submit">
-              <input type="Submit" value="ENROLL"class="subm"/>
-            </div>
+            <button type="submit" class="btn-primary btn-submit">Send Message <i class="fa-solid fa-paper-plane"></i></button>
           </form>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section class="section4" id="aboutus">
-      <div class="row">
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="nav-crest nav-crest--sm">RU</div>
+        <span>Ratvų University</span>
+      </div>
+      <p class="footer-copy">©2024 All Rights Reserved · Ratvų University · by Leonardo Bruno</p>
+      <div class="footer-socials">
+        <a href="" target="_blank" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
+        <a href="" target="_blank" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+        <a href="" target="_blank" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+        <a href="" target="_blank" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+      </div>
+    </div>
+    <a href="#home" class="back-to-top" aria-label="Back to top">
+      <i class="fa-solid fa-arrow-up"></i>
+    </a>
+  </footer>
 
-        <h1>ABOUT US</h1>
-
-          <div class="inquiries">
-            <form class="inputtxts">
-
-              <div class="name">
-                <label>Name:</label>
-                <input type="name2" placeholder="Enter Name" class="nme"/>
-              </div>
-
-              <div class="ques">
-                <label>Question/Inquiries:</label>
-                <textarea rows="5" placeholder="Enter Concerns"></textarea>
-              </div>
-              <br />
-              <div class="submit2">
-                <input type="Submit" value="Submit"class="subm2"/>
-              </div>
-
-              <div class="info">
-                <h2>MAP/LOCATION</h2>
-                  <img src="img/map.png" class"map"/>
-                <h2>CONTACT DETAILS:</h2>
-                  <br />
-                <h3>EMAIL: halimawsabanga@gmail.com</h3>
-                  <br />
-                <h3>PHONE: 09696969696</h3>
-                  <br />
-                <h3>ADDRESS: Dito Dito Lang</h3>
-                  <br />
-              </div>
-      </section>
-
-        <div class="arrowup">
-
-          <a href="#home"><i class="fa-solid fa-circle-arrow-up"></i></a>
-        </div>
-
-      <footer class="footer">
-        <div class="row" id="contact">
-          <div cass="footer-dv">
-            <p class="ft">
-              ©2023 All Rights Reserved | Ratvu University | by: Leonard Bruno
-
-                    <a href="" target="_blank"> <i class="fa-brands fa-facebook"></i></a>
-
-                    <a href="" target="_blank"><i class="fa-brands fa-instagram"></i></a>
-
-                    <a href="" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
-
-                    <a href="" target="_blank"><i class="fa-brands fa-youtube"></i></a>
-            </p>
-          </div>
-        </div>
-    </footer>
-  </body>
+</body>
 </html>
